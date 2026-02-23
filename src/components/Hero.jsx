@@ -16,7 +16,22 @@ const Hero = () => {
             <button className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition'>
                 Ver productos
             </button>
-
+            <br></br>
+            
+                        <br></br>
+            <a href='/login/'>Login</a>
+                        <br></br>
+            <a href='/register/'>Register</a>
+                        <br></br>
+            <a href='/carrito/'>Carrito</a>
+                        <br></br>
+            <a href='/checkout/'>Checkout</a>
+                        <br></br>
+            <a href='/productos/'>Productos</a>
+                        <br></br>
+            <a href='/contacto/'>Contacto</a>
+                        <br></br>
+            <a href='/mi-cuenta/'>Mi cuenta</a>
         </div>
     </section>
   )
