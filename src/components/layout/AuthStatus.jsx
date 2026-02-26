@@ -54,20 +54,19 @@ export default function AuthStatus() {
   }
 
   return (
-    <div style={{ position: "absolute", top: 10, right: 10 }}>
-      {!user ? (
-        <Link href="/login">Login</Link>
-      ) : (
-        <>
-          <Link href="/mi-cuenta">
-            {user.user_metadata?.full_name || user.email}
-          </Link>
-          {" | "}
-          <button onClick={handleLogout}>
-            Logout
-          </button>
-        </>
-      )}
-    </div>
-  )
+  <div className="flex items-center gap-3">
+    {!user ? (
+      <Link href="/login">Login</Link>
+    ) : (
+      <>
+        <Link href="/mi-cuenta">
+          {user.user_metadata?.full_name || user.email}
+        </Link>
+        <button onClick={handleLogout}>
+          Logout
+        </button>
+      </>
+    )}
+  </div>
+)
 }
