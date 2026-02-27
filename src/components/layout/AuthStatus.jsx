@@ -54,19 +54,22 @@ export default function AuthStatus() {
   }
 
   return (
-  <div className="flex items-center gap-3">
-    {!user ? (
-      <Link href="/login">Login</Link>
-    ) : (
-      <>
-        <Link href="/mi-cuenta">
-          {user.user_metadata?.full_name || user.email}
-        </Link>
-        <button onClick={handleLogout}>
-          Logout
-        </button>
-      </>
-    )}
-  </div>
-)
+    <div className="flex items-center gap-3">
+      {!user ? (
+        <Link href="/login" className="hover:text-zinc-500 dark:hover:text-zinc-300 transition-colors">Login</Link>
+      ) : (
+        <>
+          <Link href="/mi-cuenta" className="hover:text-zinc-500 dark:hover:text-zinc-300 transition-colors max-w-[120px] truncate text-sm" title={user.user_metadata?.full_name || user.email}>
+            {user.user_metadata?.full_name || user.email}
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="text-xs px-3 py-1.5 bg-zinc-200 dark:bg-white/10 hover:bg-red-100 dark:hover:bg-red-900/30 text-zinc-700 hover:text-red-600 dark:text-zinc-300 dark:hover:text-red-400 rounded-md transition-colors"
+          >
+            Logout
+          </button>
+        </>
+      )}
+    </div>
+  )
 }
