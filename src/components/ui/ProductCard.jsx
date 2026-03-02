@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { useCart } from "@/context/CartContext"
 
 export default function ProductCard({ product, isAdmin, onEdit, onDelete }) {
@@ -18,29 +19,33 @@ export default function ProductCard({ product, isAdmin, onEdit, onDelete }) {
     const stars = Math.round(product.valoration ?? 0)
 
     return (
-        <div className="border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-            <div className="relative h-48 bg-gray-100 dark:bg-zinc-800 flex items-center justify-center">
-                {product.image && !imgError ? (
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        onError={() => setImgError(true)}
-                    />
-                ) : (
-                    <span className="text-gray-400 dark:text-gray-500">Sin imagen</span>
-                )}
-                {isAdmin && (
-                    <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
-                        Admin
-                    </div>
-                )}
-            </div>
+        <div className="border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+            <Link href={`/productos/${product.id}`}>
+                <div className="relative h-48 bg-gray-100 dark:bg-zinc-800 flex items-center justify-center cursor-pointer overflow-hidden">
+                    {product.image && !imgError ? (
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            onError={() => setImgError(true)}
+                        />
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500">Sin imagen</span>
+                    )}
+                    {isAdmin && (
+                        <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
+                            Admin
+                        </div>
+                    )}
+                </div>
+            </Link>
 
             <div className="p-4 flex flex-col flex-1 gap-2">
-                <h3 className="font-semibold text-lg text-gray-900 dark:text-zinc-100 leading-tight">
-                    {product.name}
-                </h3>
+                <Link href={`/productos/${product.id}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    <h3 className="font-semibold text-lg text-gray-900 dark:text-zinc-100 dark:hover:text-blue-400 leading-tight">
+                        {product.name}
+                    </h3>
+                </Link>
 
                 <p className="text-sm text-gray-600 dark:text-zinc-400 line-clamp-2">
                     {product.description || "Sin descripción disponible."}
