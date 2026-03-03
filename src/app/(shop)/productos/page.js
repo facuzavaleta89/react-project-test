@@ -4,16 +4,17 @@ import { useEffect, useState, useCallback } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import ProductCard from "@/components/ui/ProductCard"
 import ProductForm from "@/components/ui/ProductForm"
+import { useToast } from "@/context/ToastContext"
 
 export default function ProductosPage() {
     const [products, setProducts] = useState([])
-    const [userRole, setUserRole] = useState(null) // null = loading, "guest" | "user" | "admin"
+    const [userRole, setUserRole] = useState(null)
     const [loadingProducts, setLoadingProducts] = useState(true)
     const [formOpen, setFormOpen] = useState(false)
     const [editingProduct, setEditingProduct] = useState(null)
     const [saving, setSaving] = useState(false)
-    const [toast, setToast] = useState(null) // { type: "success"|"error", msg }
     const [search, setSearch] = useState("")
+    const { showToast } = useToast()
 
     // ── Cargar usuario y su rol ──────────────────────────────────────────────
     useEffect(() => {
@@ -55,10 +56,7 @@ export default function ProductosPage() {
     }, [fetchProducts])
 
     // ── Toast helper ─────────────────────────────────────────────────────────
-    const showToast = (type, msg) => {
-        setToast({ type, msg })
-        setTimeout(() => setToast(null), 3500)
-    }
+    const showToastLocal = (type, msg) => showToast(msg, type)
 
     // ── CRUD ─────────────────────────────────────────────────────────────────
     const handleSave = async (formData) => {
@@ -69,9 +67,9 @@ export default function ProductosPage() {
                 .update(formData)
                 .eq("id", editingProduct.id)
             if (error) {
-                showToast("error", "Error al actualizar el producto.")
+                showToastLocal("error", "Error al actualizar el producto.")
             } else {
-                showToast("success", "Producto actualizado correctamente.")
+                showToastLocal("success", "Producto actualizado correctamente.")
                 setFormOpen(false)
                 setEditingProduct(null)
                 fetchProducts()
@@ -79,9 +77,9 @@ export default function ProductosPage() {
         } else {
             const { error } = await supabase.from("products").insert([formData])
             if (error) {
-                showToast("error", "Error al crear el producto.")
+                showToastLocal("error", "Error al crear el producto.")
             } else {
-                showToast("success", "Producto creado correctamente.")
+                showToastLocal("success", "Producto creado correctamente.")
                 setFormOpen(false)
                 fetchProducts()
             }
@@ -97,9 +95,9 @@ export default function ProductosPage() {
     const handleDelete = async (id) => {
         const { error } = await supabase.from("products").delete().eq("id", id)
         if (error) {
-            showToast("error", "Error al eliminar el producto.")
+            showToastLocal("error", "Error al eliminar el producto.")
         } else {
-            showToast("success", "Producto eliminado.")
+            showToastLocal("success", "Producto eliminado.")
             setProducts((prev) => prev.filter((p) => p.id !== id))
         }
     }
@@ -228,18 +226,6 @@ export default function ProductosPage() {
                 />
             )}
 
-            {/* Toast Notification */}
-            {toast && (
-                <div
-                    className={`fixed bottom-4 right-4 px-4 py-3 rounded-md shadow-lg flex items-center gap-3 text-sm font-medium border z-50 animate-bounce transition-colors ${toast.type === "success"
-                            ? "bg-green-50 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800"
-                            : "bg-red-50 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800"
-                        }`}
-                >
-                    {toast.type === "success" ? "✓" : "✕"}
-                    {toast.msg}
-                </div>
-            )}
         </div>
     )
 }
