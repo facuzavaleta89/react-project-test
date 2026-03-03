@@ -1,42 +1,43 @@
-import React from 'react'
+import Link from "next/link"
 
 const Hero = () => {
-  return (
-    <section className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 py-24'>
-        <div className='container mx-auto px-6 text-center'>
-            
-            <h1 className='text-4x1 md:text-6x1 font-bold mb-6'>
-                Comercio
-            </h1>
+    return (
+        <section className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 py-20 sm:py-28 px-6">
+            <div className="max-w-3xl mx-auto text-center">
 
-            <p className='text-gray-600 text-lg mb-8'>
-                los mejores productos
-            </p>
+                <span className="inline-block text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-4">
+                    Tu tienda de confianza
+                </span>
 
-            <button className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition'>
-                Ver productos
-            </button>
-            <br></br>
-            
-                        <br></br>
-            <a href='/login/'>Login</a>
-                        <br></br>
-            <a href='/register/'>Register</a>
-                        <br></br>
-            <a href='/carrito/'>Carrito</a>
-                        <br></br>
-            <a href='/checkout/'>Checkout</a>
-                        <br></br>
-            <a href='/productos/'>Productos</a>
-                        <br></br>
-            <a href='/contacto/'>Contacto</a>
-                        <br></br>
-            <a href='/mi-cuenta/'>Mi cuenta</a>
-        </div>
-    </section>
-  )
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+                    Los mejores productos, <br className="hidden sm:block" />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
+                        al mejor precio
+                    </span>
+                </h2>
+
+                <p className="text-zinc-400 text-lg sm:text-xl mb-10 max-w-xl mx-auto leading-relaxed">
+                    Explorá nuestro catálogo y encontrá lo que necesitás con envío rápido y pago seguro.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <Link
+                        href="/productos"
+                        className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/30 text-center"
+                    >
+                        Ver productos
+                    </Link>
+                    <Link
+                        href="/contacto"
+                        className="w-full sm:w-auto px-8 py-3.5 border border-zinc-600 hover:border-zinc-400 text-zinc-300 hover:text-white font-semibold rounded-xl transition-colors text-center"
+                    >
+                        Contactanos
+                    </Link>
+                </div>
+
+            </div>
+        </section>
+    )
 }
 
 export default Hero
-
-

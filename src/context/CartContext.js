@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import { supabase } from "@/lib/supabaseClient"
+import { useToast } from "@/context/ToastContext"
 
 const CartContext = createContext()
 
@@ -10,6 +11,7 @@ export function CartProvider({ children }) {
     const [user, setUser] = useState(null)
     const [cartId, setCartId] = useState(null)
     const [loading, setLoading] = useState(true)
+    const { showToast } = useToast()
 
     // 1. Initial Auth Check and Setup
     useEffect(() => {
@@ -186,8 +188,6 @@ export function CartProvider({ children }) {
 
     const addToCart = async (product) => {
         if (user && cartId) {
-            // Supabase Add
-            // Optimistic UI update
             setCart((prev) => {
                 const existing = prev.find((item) => item.id === product.id)
                 if (existing) {
@@ -198,9 +198,8 @@ export function CartProvider({ children }) {
                 return [...prev, { ...product, quantity: 1 }]
             })
             await insertOrUpdateItem(cartId, product.id, 1)
-            await fetchCartItems(cartId) // Sync to get real PKs
+            await fetchCartItems(cartId)
         } else {
-            // Local Add
             setCart((prev) => {
                 const existing = prev.find((item) => item.id === product.id)
                 if (existing) {
@@ -211,13 +210,13 @@ export function CartProvider({ children }) {
                 return [...prev, { ...product, quantity: 1 }]
             })
         }
+        showToast(`"${product.name}" agregado al carrito 🛒`, "success")
     }
 
     const removeFromCart = async (productId) => {
+        const item = cart.find((i) => i.id === productId)
         if (user && cartId) {
-            // Optimistic UI
             setCart((prev) => prev.filter((item) => item.id !== productId))
-            // Supabase remove
             await supabase
                 .from("cart_items")
                 .delete()
@@ -226,6 +225,7 @@ export function CartProvider({ children }) {
         } else {
             setCart((prev) => prev.filter((item) => item.id !== productId))
         }
+        if (item) showToast(`"${item.name}" eliminado del carrito.`, "info")
     }
 
     const updateQuantity = async (productId, quantity) => {
@@ -251,6 +251,7 @@ export function CartProvider({ children }) {
         } else {
             setCart([])
         }
+        showToast("Carrito vaciado.", "warning")
     }
 
     const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0)

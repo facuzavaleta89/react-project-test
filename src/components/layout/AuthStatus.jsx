@@ -4,10 +4,12 @@ import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useToast } from "@/context/ToastContext"
 
 export default function AuthStatus() {
   const [user, setUser] = useState(null)
   const router = useRouter()
+  const { showToast } = useToast()
 
   useEffect(() => {
     const getUserAndProfile = async () => {
@@ -16,7 +18,6 @@ export default function AuthStatus() {
       if (user) {
         setUser(user)
 
-        // Verificar si existe profile
         const { data: profile } = await supabase
           .from("profiles")
           .select("*")
@@ -38,8 +39,16 @@ export default function AuthStatus() {
     getUserAndProfile()
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
+      (event, session) => {
+        const newUser = session?.user ?? null
+        setUser(newUser)
+
+        if (event === "SIGNED_IN") {
+          showToast(`¡Bienvenido${newUser?.user_metadata?.full_name ? `, ${newUser.user_metadata.full_name}` : ""}! 👋`, "success")
+        }
+        if (event === "SIGNED_OUT") {
+          showToast("Sesión cerrada correctamente.", "info")
+        }
       }
     )
 
@@ -59,7 +68,11 @@ export default function AuthStatus() {
         <Link href="/login" className="hover:text-zinc-500 dark:hover:text-zinc-300 transition-colors">Login</Link>
       ) : (
         <>
-          <Link href="/mi-cuenta" className="hover:text-zinc-500 dark:hover:text-zinc-300 transition-colors max-w-[120px] truncate text-sm" title={user.user_metadata?.full_name || user.email}>
+          <Link
+            href="/mi-cuenta"
+            className="hover:text-zinc-500 dark:hover:text-zinc-300 transition-colors max-w-[120px] truncate text-sm"
+            title={user.user_metadata?.full_name || user.email}
+          >
             {user.user_metadata?.full_name || user.email}
           </Link>
           <button
