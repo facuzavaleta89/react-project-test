@@ -1,11 +1,26 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
 import ProductCard from "@/components/ui/ProductCard"
 import ProductForm from "@/components/ui/ProductForm"
 
 export default function ProductosPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex justify-center items-center py-24">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 dark:border-blue-500"></div>
+            </div>
+        }>
+            <ProductosList />
+        </Suspense>
+    )
+}
+
+function ProductosList() {
+    const searchParams = useSearchParams()
+
     const [products, setProducts] = useState([])
     const [userRole, setUserRole] = useState(null) // null = loading, "guest" | "user" | "admin"
     const [loadingProducts, setLoadingProducts] = useState(true)
@@ -13,7 +28,8 @@ export default function ProductosPage() {
     const [editingProduct, setEditingProduct] = useState(null)
     const [saving, setSaving] = useState(false)
     const [toast, setToast] = useState(null) // { type: "success"|"error", msg }
-    const [search, setSearch] = useState("")
+    const [search, setSearch] = useState(searchParams.get("search") || "")
+    const [category, setCategory] = useState(searchParams.get("category") || "")
 
     // ── Cargar usuario y su rol ──────────────────────────────────────────────
     useEffect(() => {
@@ -114,11 +130,17 @@ export default function ProductosPage() {
         setEditingProduct(null)
     }
 
-    // ── Filtrado por búsqueda ────────────────────────────────────────────────
-    const filteredProducts = products.filter((p) =>
-        p.name?.toLowerCase().includes(search.toLowerCase()) ||
-        p.description?.toLowerCase().includes(search.toLowerCase())
-    )
+    // ── Filtrado por búsqueda y categoría ───────────────────────────────────
+    const filteredProducts = products.filter((p) => {
+        const matchesSearch = !search ||
+            p.name?.toLowerCase().includes(search.toLowerCase()) ||
+            p.description?.toLowerCase().includes(search.toLowerCase())
+
+        const matchesCategory = !category ||
+            p.category?.toLowerCase() === category.toLowerCase()
+
+        return matchesSearch && matchesCategory
+    })
 
     const isAdmin = userRole === "admin"
 
@@ -148,9 +170,8 @@ export default function ProductosPage() {
                     )}
                 </div>
 
-                {/* Toolbar (Search) */}
-                <div className="mb-6">
-                    <div className="relative max-w-md">
+                <div className="mb-6 flex flex-col md:flex-row gap-4 items-end">
+                    <div className="relative max-w-md w-full">
                         <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-zinc-500">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="11" cy="11" r="8" />
@@ -165,6 +186,19 @@ export default function ProductosPage() {
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
+                    {category && (
+                        <div className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                            Categoría: {category}
+                            <button
+                                onClick={() => setCategory("")}
+                                className="ml-2 hover:text-blue-900 dark:hover:text-blue-100"
+                            >
+                                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 {/* Info Banners */}
@@ -232,8 +266,8 @@ export default function ProductosPage() {
             {toast && (
                 <div
                     className={`fixed bottom-4 right-4 px-4 py-3 rounded-md shadow-lg flex items-center gap-3 text-sm font-medium border z-50 animate-bounce transition-colors ${toast.type === "success"
-                            ? "bg-green-50 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800"
-                            : "bg-red-50 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800"
+                        ? "bg-green-50 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800"
+                        : "bg-red-50 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800"
                         }`}
                 >
                     {toast.type === "success" ? "✓" : "✕"}

@@ -1,4 +1,5 @@
 import Navbar from "@/components/layout/NavBar"
+import Footer from "@/components/layout/Footer"
 import { CartProvider } from "@/context/CartContext"
 import { ThemeProvider } from "@/context/ThemeContext"
 import { Geist, Geist_Mono } from "next/font/google"
@@ -26,9 +27,10 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <CartProvider>
             <Navbar />
-            <div className="pt-20">
+            <div className="pt-20 min-h-screen">
               {children}
             </div>
+            <Footer />
           </CartProvider>
         </ThemeProvider>
       </body>
