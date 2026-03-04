@@ -6,7 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/context/ToastContext"
 
-export default function AuthStatus() {
+export default function AuthStatus({ enableToast = true }) {
   const [user, setUser] = useState(null)
   const router = useRouter()
   const { showToast } = useToast()
@@ -43,10 +43,10 @@ export default function AuthStatus() {
         const newUser = session?.user ?? null
         setUser(newUser)
 
-        if (event === "SIGNED_IN") {
+        if (event === "SIGNED_IN" && enableToast) {
           showToast(`¡Bienvenido${newUser?.user_metadata?.full_name ? `, ${newUser.user_metadata.full_name}` : ""}! 👋`, "success")
         }
-        if (event === "SIGNED_OUT") {
+        if (event === "SIGNED_OUT" && enableToast) {
           showToast("Sesión cerrada correctamente.", "info")
         }
       }

@@ -232,7 +232,7 @@ const Navbar = () => {
           <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3">
             Cuenta
           </p>
-          <AuthStatus />
+          <AuthStatus enableToast={false} />
         </div>
       </div>
     </>
