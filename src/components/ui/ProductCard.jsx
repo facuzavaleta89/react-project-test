@@ -41,11 +41,18 @@ export default function ProductCard({ product, isAdmin, onEdit, onDelete }) {
             </Link>
 
             <div className="p-4 flex flex-col flex-1 gap-2">
-                <Link href={`/productos/${product.id}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                    <h3 className="font-semibold text-lg text-gray-900 dark:text-zinc-100 dark:hover:text-blue-400 leading-tight">
-                        {product.name}
-                    </h3>
-                </Link>
+                <div className="flex justify-between items-start gap-2">
+                    <Link href={`/productos/${product.id}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex-1">
+                        <h3 className="font-semibold text-lg text-gray-900 dark:text-zinc-100 dark:hover:text-blue-400 leading-tight">
+                            {product.name}
+                        </h3>
+                    </Link>
+                    {product.categories && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-zinc-800 dark:text-zinc-300">
+                            {product.categories.name}
+                        </span>
+                    )}
+                </div>
 
                 <p className="text-sm text-gray-600 dark:text-zinc-400 line-clamp-2">
                     {product.description || "Sin descripción disponible."}

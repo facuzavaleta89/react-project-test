@@ -8,9 +8,10 @@ const EMPTY_FORM = {
     price: "",
     valoration: "",
     image: "",
+    category_id: "",
 }
 
-export default function ProductForm({ initial, onSave, onCancel, loading }) {
+export default function ProductForm({ initial, categories = [], onSave, onCancel, loading }) {
     const [form, setForm] = useState(EMPTY_FORM)
     const [errors, setErrors] = useState({})
 
@@ -22,6 +23,7 @@ export default function ProductForm({ initial, onSave, onCancel, loading }) {
                 price: initial.price ?? "",
                 valoration: initial.valoration ?? "",
                 image: initial.image ?? "",
+                category_id: initial.category_id ?? "",
             })
         } else {
             setForm(EMPTY_FORM)
@@ -63,6 +65,7 @@ export default function ProductForm({ initial, onSave, onCancel, loading }) {
             price: Number(form.price),
             valoration: form.valoration !== "" ? Number(form.valoration) : null,
             image: form.image.trim() || null,
+            category_id: form.category_id || null,
         })
     }
 
@@ -114,6 +117,25 @@ export default function ProductForm({ initial, onSave, onCancel, loading }) {
                             placeholder="Descripción del producto (opcional)"
                             rows={3}
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
+                            Categoría
+                        </label>
+                        <select
+                            name="category_id"
+                            className="w-full bg-white dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded p-2 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                            value={form.category_id}
+                            onChange={handleChange}
+                        >
+                            <option value="">-- Sin categoría --</option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>
+                                    {cat.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
