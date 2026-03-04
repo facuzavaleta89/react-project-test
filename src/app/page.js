@@ -10,7 +10,7 @@ export default function Home() {
 
       {/* Subtítulo */}
       <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-        Practicando estructura con React y Tailwind.
+        Practicando estructura con React y Tailwind. Practicando estructura con React y Tailwind.
       </p>
 
       {/* Separador visual */}
