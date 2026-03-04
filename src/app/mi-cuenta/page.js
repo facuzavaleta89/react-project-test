@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabaseClient"
 import { useRouter } from "next/navigation"
+import { useToast } from "@/context/ToastContext"
 
 export default function MiCuenta() {
   const [profile, setProfile] = useState(null)
   const [email, setEmail] = useState("")
   const [saving, setSaving] = useState(false)
-  const [toast, setToast] = useState(null)
   const router = useRouter()
+  const { showToast } = useToast()
 
   useEffect(() => {
     const getProfile = async () => {
@@ -39,10 +40,6 @@ export default function MiCuenta() {
     getProfile()
   }, [router])
 
-  const showToast = (type, msg) => {
-    setToast({ type, msg })
-    setTimeout(() => setToast(null), 3500)
-  }
 
   const handleSave = async (e) => {
     e.preventDefault()
@@ -57,9 +54,9 @@ export default function MiCuenta() {
 
     if (error) {
       console.error(error)
-      showToast("error", "Error al actualizar la información.")
+      showToast("Error al actualizar la información.", "error")
     } else {
-      showToast("success", "Perfil actualizado correctamente.")
+      showToast("Perfil actualizado correctamente. ✓", "success")
     }
   }
 
@@ -148,19 +145,6 @@ export default function MiCuenta() {
           </form>
         </div>
       </div>
-
-      {/* Toast Notification */}
-      {toast && (
-        <div
-          className={`fixed bottom-4 right-4 px-4 py-3 rounded-md shadow-lg flex items-center gap-3 text-sm font-medium border z-50 animate-bounce transition-colors ${toast.type === "success"
-            ? "bg-green-50 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800"
-            : "bg-red-50 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800"
-            }`}
-        >
-          {toast.type === "success" ? "✓" : "✕"}
-          {toast.msg}
-        </div>
-      )}
     </div>
   )
 }

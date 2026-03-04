@@ -118,12 +118,12 @@ export default function CarritoPage() {
                         >
                             Vaciar carrito
                         </button>
-                        <button
-                            className="px-8 py-3 bg-blue-600 text-white rounded-md font-bold hover:bg-blue-700 transition-colors shadow-sm w-full sm:w-auto"
-                            onClick={() => alert("Función de checkout configurada pronto.")}
+                        <Link
+                            href="/checkout"
+                            className="px-8 py-3 bg-blue-600 text-white text-center rounded-md font-bold hover:bg-blue-700 transition-colors shadow-sm w-full sm:w-auto block"
                         >
                             Finalizar compra
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
