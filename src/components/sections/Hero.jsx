@@ -2,7 +2,7 @@ import Link from "next/link"
 
 const Hero = () => {
     return (
-        <section className="bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 py-20 sm:py-28 px-6">
+        <section className="bg-linear-to-br from-zinc-900 via-zinc-800 to-zinc-900 py-20 sm:py-28 px-6">
             <div className="max-w-3xl mx-auto text-center">
 
                 <span className="inline-block text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-4">
@@ -11,7 +11,7 @@ const Hero = () => {
 
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
                     Los mejores productos, <br className="hidden sm:block" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
+                    <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-500">
                         al mejor precio
                     </span>
                 </h2>

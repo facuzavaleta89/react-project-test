@@ -184,14 +184,14 @@ export default function LoginPage() {
             {/* Feedback */}
             {error && (
               <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-500 text-sm px-3 py-2.5 rounded-lg">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                 {error}
               </div>
             )}
 
             {success && (
               <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-sm px-3 py-2.5 rounded-lg">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0"><circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" /></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" /></svg>
                 {success}
               </div>
             )}
@@ -211,9 +211,9 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="my-6 flex items-center gap-3">
-            <div className="flex-grow h-px bg-zinc-200 dark:bg-zinc-700" />
+            <div className="grow h-px bg-zinc-200 dark:bg-zinc-700" />
             <span className="text-xs text-zinc-400 dark:text-zinc-500">o continuá con</span>
-            <div className="flex-grow h-px bg-zinc-200 dark:bg-zinc-700" />
+            <div className="grow h-px bg-zinc-200 dark:bg-zinc-700" />
           </div>
 
           {/* Google */}
