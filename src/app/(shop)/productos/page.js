@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import { useSearchParams } from "next/navigation"
 import { supabase } from "@/lib/supabaseClient"
 import ProductCard from "@/components/ui/ProductCard"
 import ProductForm from "@/components/ui/ProductForm"
@@ -8,16 +9,20 @@ import CategoryManager from "@/components/ui/CategoryManager"
 import { useToast } from "@/context/ToastContext"
 
 export default function ProductosPage() {
+    const searchParams = useSearchParams()
+    const initialSearch = searchParams.get("search") || ""
+    const initialCategory = searchParams.get("category") || null
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
-    const [selectedCategory, setSelectedCategory] = useState(null)
+    const [selectedCategory, setSelectedCategory] = useState(initialCategory ? parseInt(initialCategory) : null)
     const [userRole, setUserRole] = useState(null)
     const [loadingProducts, setLoadingProducts] = useState(true)
     const [formOpen, setFormOpen] = useState(false)
     const [editingProduct, setEditingProduct] = useState(null)
     const [saving, setSaving] = useState(false)
-    const [search, setSearch] = useState("")
+    const [search, setSearch] = useState(initialSearch)
     const [sortBy, setSortBy] = useState("newest")
+    const [displayedCount, setDisplayedCount] = useState(12)
     const { showToast } = useToast()
 
     // ── Cargar usuario y su rol ──────────────────────────────────────────────
@@ -67,6 +72,11 @@ export default function ProductosPage() {
         fetchCategories()
         fetchProducts()
     }, [fetchCategories, fetchProducts])
+
+    // ── Resetear displayedCount cuando cambian los filtros ──────────────────
+    useEffect(() => {
+        setDisplayedCount(12)
+    }, [search, selectedCategory])
 
     // ── CRUD Categorías ──────────────────────────────────────────────────────
     const handleAddCategory = async (name) => {
@@ -299,17 +309,30 @@ export default function ProductosPage() {
                         </p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {sortedProducts.map((product) => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                                isAdmin={isAdmin}
-                                onEdit={handleEdit}
-                                onDelete={handleDelete}
-                            />
-                        ))}
-                    </div>
+                    <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {sortedProducts.slice(0, displayedCount).map((product) => (
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                    isAdmin={isAdmin}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                />
+                            ))}
+                        </div>
+
+                        {sortedProducts.length > displayedCount && (
+                            <div className="flex justify-center mt-10">
+                                <button
+                                    onClick={() => setDisplayedCount(displayedCount + 12)}
+                                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors shadow-md hover:shadow-lg"
+                                >
+                                    Ver más productos
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
 
             </div>
