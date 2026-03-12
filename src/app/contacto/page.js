@@ -71,11 +71,28 @@ export default function ContactoPage() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
-        // Simulación de envío
-        await new Promise((r) => setTimeout(r, 1200))
-        setLoading(false)
-        setForm({ name: "", email: "", topic: "", message: "" })
-        showToast("¡Mensaje enviado! Te responderemos a la brevedad. ✉️", "success")
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                showToast(data.error || "Error al enviar el mensaje", "error")
+            } else {
+                setForm({ name: "", email: "", topic: "", message: "" })
+                showToast("¡Mensaje enviado! Te responderemos a la brevedad. ✉️", "success")
+            }
+        } catch (error) {
+            console.error("Error:", error)
+            showToast("Error al enviar el mensaje", "error")
+        } finally {
+            setLoading(false)
+        }
     }
 
     const inputClass =
