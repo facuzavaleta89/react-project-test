@@ -55,9 +55,9 @@ export default function CheckoutPage() {
                 throw new Error(data.error || "Error al conectar con Mercado Pago")
             }
 
-            // Redirigir a la URL del sandbox directamente (Checkout Pro nativo)
+            // Abrir nueva ventana con la URL del pago
             if (data.sandbox_init_point) {
-                window.location.href = data.sandbox_init_point
+                window.open(data.sandbox_init_point, "_blank", "width=800,height=600")
             } else {
                 throw new Error("No se pudo obtener el link de pago.")
             }
