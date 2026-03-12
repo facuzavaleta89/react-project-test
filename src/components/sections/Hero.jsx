@@ -2,7 +2,7 @@ import Link from "next/link"
 
 const Hero = () => {
     return (
-        <section className="bg-linear-to-br from-zinc-900 via-zinc-800 to-zinc-900 py-20 sm:py-28 px-6">
+        <section className="bg-linear-to-br from-zinc-900 via-zinc-800 to-zinc-900 py-20 sm:py-28 px-6 rounded-2xl shadow-lg">
             <div className="max-w-3xl mx-auto text-center">
 
                 <span className="inline-block text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-4">
